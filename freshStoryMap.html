@@ -252,8 +252,11 @@ width: 110px;
     <input type="submit" value="Map Story" style="float: left;">
   </form>
     <form action="/routebeschrijving" onSubmit="sendRoute();return false;">
+      <div id="submission">
       <input type="submit" value="Submit">
-    <p>Total Distance: <span id="total"></span></p>
+    </div>
+
+    <p style= "float:left;">Total Distance: <span id="total"></span></p>
 </form>
     <div id="directionsPanel" style="position: relative; float: left;margin-left: -25;font-size: 12;width: 100%;">
   </div>
@@ -316,6 +319,9 @@ $("#flipsix").click(function(){
     $("#flipsix").slideUp("slow");
         plotEach();
     $("#flip6").slideDown("slow");
+  });
+$("#submission").click(function(){
+    $("#submission").slideUp("slow");
   });
 })
 
