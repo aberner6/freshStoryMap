@@ -522,11 +522,40 @@ function calcRoute() {
 }
 
 function sendRoute() {
-   console.log("Sending to DB")
-  // get the travelmode, startpoint and via point from the form   
+ // get the travelmode, startpoint and via point from the form   
   var travelMode = $('input[name="travelMode"]:checked').val();
+  var budget = $('input[name="budget"]:checked').val();
+  var purpose = $('input[name="travelPurp"]:checked').val();
+  var purpose4 = $("#purpose4").val();
+  console.log(purpose)
+  console.log(purpose4)
+  if (purpose4){
+   purpose = purpose4;
+  }
   var start = $("#start").val();
   var end = $("#end").val();
+  var storyName = $("#storyName").val();
+  var characters = $("#characters").val();
+  
+  var date0 = document.getElementById("date0").value;
+  var date1 = document.getElementById("date1").value;
+  var date2 = document.getElementById("date2").value;
+  var date3 = document.getElementById("date3").value;
+  var date4 = document.getElementById("date4").value;
+  var date5= document.getElementById("date5").value;
+  var date6 = document.getElementById("date6").value;
+  var date7 = document.getElementById("date7").value;
+  var date_array = [date0, date1, date2, date3, date4, date5, date6, date7]
+  
+  var info0 = document.getElementById("info0").value;
+  var info1 = document.getElementById("info1").value;
+  var info2 = document.getElementById("info2").value;
+  var info3 = document.getElementById("info3").value;
+  var info4 = document.getElementById("info4").value;
+  var info5= document.getElementById("info5").value;
+  var info6 = document.getElementById("info6").value;
+  var info7 = document.getElementById("info7").value;
+  var info_array = [info0, info1, info2, info3, info4, info5, info6, info7]
 
   var waypoint1 = document.getElementById("waypoint1").value;
   var waypoint2 = document.getElementById("waypoint2").value;
@@ -540,7 +569,6 @@ function sendRoute() {
   // var address;
  for (var i = 0; i < checkboxArray.length; i++) {
   if (checkboxArray[i]!=''){
-    console.log(checkboxArray[i])
     var address = checkboxArray[i];
       waypts.push({
           location:address,
@@ -556,8 +584,8 @@ function sendRoute() {
     unitSystem: google.maps.UnitSystem.IMPERIAL,
     travelMode: google.maps.DirectionsTravelMode[travelMode]
   };
+  
   directionsService.route(request, function(response, status) {
-     console.log(status)
     if (status == google.maps.DirectionsStatus.OK) {
       $('#directionsPanel').empty(); // clear the directions panel before adding new directions
       directionsDisplay.setDirections(response);
@@ -572,24 +600,249 @@ function sendRoute() {
         summaryPanel.innerHTML += route.legs[i].end_address + "<br />";
         summaryPanel.innerHTML += route.legs[i].distance.text + "<br /><br />";
       }
-      $.ajax({type:"GET", url: $SCRIPT_ROOT + '/_add_numbers', data: summaryPanel.innerHTML, dataType:"xml"
-         , success:function(data) {
-        $("#result").text(data.result);
-      }});
-    }else{
-      var address_array = [start, waypoint1, waypoint2, waypoint3, waypoint4, waypoint5, waypoint6]
-      for (var i = 0; i < address_array.length; i++) {
-         var request = {address: address_array[i]};
-         Geocoder.geocode(request,  function(results, status) {
-            if (status == google.maps.GeocoderStatus.OK) {
-               var marker = new google.maps.Marker({
-                  map: map,
-                  position: results[0].geometry.location
-               });
-               }});
-      };
-    }
+
+            }
+    
   });
+  //Create the stops portion of the xml. 
+        var story_array = [];
+        var address_array = [start,waypoint1, waypoint2, waypoint3, waypoint4, waypoint5, waypoint6,end];
+        var city = "";
+        var state = "";
+        var country = "";
+        var request = {address: start};
+        Geocoder.geocode(request,  function(results, status) {
+           if (status == google.maps.GeocoderStatus.OK) {
+                 var marker = new google.maps.Marker({
+                    map: map,
+                    position: results[0].geometry.location
+                 });
+              for (var j =0; j< results[0].address_components.length;j++){
+                  if (results[0].address_components[j].types[0] == "locality"){
+                     city = results[0].address_components[j].long_name;
+                  }
+                  if (results[0].address_components[j].types[0] == "administrative_area_level_1"){
+                     state = results[0].address_components[j].long_name;
+                  }
+                  if (results[0].address_components[j].types[0] == "country"){
+                     country = results[0].address_components[j].long_name;
+                  }
+              }
+              console.log(results[0])
+              story_array.push("<stop><latitude>"+results[0].geometry.location.jb +"</latitude>"+"<longitude>" + results[0].geometry.location.kb+"</longitude><city>"+city+"</city><state>"+state+"</state><country>"+country+"</country>");
+      }});
+       setTimeout(function(){
+       var city = "";
+       var state = "";
+       var country = "";
+       var request = {address: waypoint1};
+       Geocoder.geocode(request,  function(results, status, i, info_array) {
+          if (status == google.maps.GeocoderStatus.OK) {
+                var marker = new google.maps.Marker({
+                   map: map,
+                   position: results[0].geometry.location
+                });
+             for (var j =0; j< results[0].address_components.length;j++){
+                 if (results[0].address_components[j].types[0] == "locality"){
+                    city = results[0].address_components[j].long_name;
+                 }
+                 if (results[0].address_components[j].types[0] == "administrative_area_level_1"){
+                    state = results[0].address_components[j].long_name;
+                 }
+                 if (results[0].address_components[j].types[0] == "country"){
+                    country = results[0].address_components[j].long_name;
+                 }
+             }
+             console.log(results[0])
+             story_array.push("<stop><latitude>"+results[0].geometry.location.jb +"</latitude>"+"<longitude>" + results[0].geometry.location.kb+"</longitude><city>"+city+"</city><state>"+state+"</state><country>"+country+"</country>");
+             }});
+      },300);
+             setTimeout(function(){
+       var city = "";
+       var state = "";
+       var country = "";
+       var request = {address: waypoint2};
+       Geocoder.geocode(request,  function(results, status, i, info_array) {
+          if (status == google.maps.GeocoderStatus.OK) {
+                var marker = new google.maps.Marker({
+                   map: map,
+                   position: results[0].geometry.location
+                });
+             for (var j =0; j< results[0].address_components.length;j++){
+                 if (results[0].address_components[j].types[0] == "locality"){
+                    city = results[0].address_components[j].long_name;
+                 }
+                 if (results[0].address_components[j].types[0] == "administrative_area_level_1"){
+                    state = results[0].address_components[j].long_name;
+                 }
+                 if (results[0].address_components[j].types[0] == "country"){
+                    country = results[0].address_components[j].long_name;
+                 }
+             }
+             story_array.push("<stop><latitude>"+results[0].geometry.location.jb +"</latitude>"+"<longitude>" + results[0].geometry.location.kb+"</longitude><city>"+city+"</city><state>"+state+"</state><country>"+country+"</country>");
+             }});
+      },600);
+             setTimeout(function(){
+       var city = "";
+       var state = "";
+       var country = "";
+       var request = {address: waypoint3};
+       Geocoder.geocode(request,  function(results, status, i, info_array) {
+          if (status == google.maps.GeocoderStatus.OK) {
+                var marker = new google.maps.Marker({
+                   map: map,
+                   position: results[0].geometry.location
+                });
+             for (var j =0; j< results[0].address_components.length;j++){
+                 if (results[0].address_components[j].types[0] == "locality"){
+                    city = results[0].address_components[j].long_name;
+                 }
+                 if (results[0].address_components[j].types[0] == "administrative_area_level_1"){
+                    state = results[0].address_components[j].long_name;
+                 }
+                 if (results[0].address_components[j].types[0] == "country"){
+                    country = results[0].address_components[j].long_name;
+                 }
+             }
+             story_array.push("<stop><latitude>"+results[0].geometry.location.jb +"</latitude>"+"<longitude>" + results[0].geometry.location.kb+"</longitude><city>"+city+"</city><state>"+state+"</state><country>"+country+"</country>");
+             }});
+      },900);
+             setTimeout(function(){
+       var city = "";
+       var state = "";
+       var country = "";
+       var request = {address: waypoint4};
+       Geocoder.geocode(request,  function(results, status, i, info_array) {
+          if (status == google.maps.GeocoderStatus.OK) {
+                var marker = new google.maps.Marker({
+                   map: map,
+                   position: results[0].geometry.location
+                });
+             for (var j =0; j< results[0].address_components.length;j++){
+                 if (results[0].address_components[j].types[0] == "locality"){
+                    city = results[0].address_components[j].long_name;
+                 }
+                 if (results[0].address_components[j].types[0] == "administrative_area_level_1"){
+                    state = results[0].address_components[j].long_name;
+                 }
+                 if (results[0].address_components[j].types[0] == "country"){
+                    country = results[0].address_components[j].long_name;
+                 }
+             }
+             story_array.push("<stop><latitude>"+results[0].geometry.location.jb +"</latitude>"+"<longitude>" + results[0].geometry.location.kb+"</longitude><city>"+city+"</city><state>"+state+"</state><country>"+country+"</country>");
+             }});
+      },1200);
+             setTimeout(function(){
+       var city = "";
+       var state = "";
+       var country = "";
+       var request = {address: waypoint5};
+       Geocoder.geocode(request,  function(results, status, i, info_array) {
+          if (status == google.maps.GeocoderStatus.OK) {
+                var marker = new google.maps.Marker({
+                   map: map,
+                   position: results[0].geometry.location
+                });
+             for (var j =0; j< results[0].address_components.length;j++){
+                 if (results[0].address_components[j].types[0] == "locality"){
+                    city = results[0].address_components[j].long_name;
+                 }
+                 if (results[0].address_components[j].types[0] == "administrative_area_level_1"){
+                    state = results[0].address_components[j].long_name;
+                 }
+                 if (results[0].address_components[j].types[0] == "country"){
+                    country = results[0].address_components[j].long_name;
+                 }
+             }
+             story_array.push("<stop><latitude>"+results[0].geometry.location.jb +"</latitude>"+"<longitude>" + results[0].geometry.location.kb+"</longitude><city>"+city+"</city><state>"+state+"</state><country>"+country+"</country>");
+             }});
+      },1500);
+             setTimeout(function(){
+       var city = "";
+       var state = "";
+       var country = "";
+       var request = {address: waypoint6};
+       Geocoder.geocode(request,  function(results, status, i, info_array) {
+          if (status == google.maps.GeocoderStatus.OK) {
+                var marker = new google.maps.Marker({
+                   map: map,
+                   position: results[0].geometry.location
+                });
+             for (var j =0; j< results[0].address_components.length;j++){
+                 if (results[0].address_components[j].types[0] == "locality"){
+                    city = results[0].address_components[j].long_name;
+                 }
+                 if (results[0].address_components[j].types[0] == "administrative_area_level_1"){
+                    state = results[0].address_components[j].long_name;
+                 }
+                 if (results[0].address_components[j].types[0] == "country"){
+                    country = results[0].address_components[j].long_name;
+                 }
+             }
+             story_array.push("<stop><latitude>"+results[0].geometry.location.jb +"</latitude>"+"<longitude>" + results[0].geometry.location.kb+"</longitude><city>"+city+"</city><state>"+state+"</state><country>"+country+"</country>");
+             }});
+      },1800);
+      
+       setTimeout(function(){
+       var city = "";
+       var state = "";
+       var country = "";
+       var request = {address: end};
+       Geocoder.geocode(request,  function(results, status, i, info_array) {
+          if (status == google.maps.GeocoderStatus.OK) {
+                var marker = new google.maps.Marker({
+                   map: map,
+                   position: results[0].geometry.location
+                });
+             for (var j =0; j< results[0].address_components.length;j++){
+                 if (results[0].address_components[j].types[0] == "locality"){
+                    city = results[0].address_components[j].long_name;
+                 }
+                 if (results[0].address_components[j].types[0] == "administrative_area_level_1"){
+                    state = results[0].address_components[j].long_name;
+                 }
+                 if (results[0].address_components[j].types[0] == "country"){
+                    country = results[0].address_components[j].long_name;
+                 }
+             }
+             story_array.push("<stop><latitude>"+results[0].geometry.location.jb +"</latitude>"+"<longitude>" + results[0].geometry.location.kb+"</longitude><city>"+city+"</city><state>"+state+"</state><country>"+country+"</country>");
+             }});
+      },2100);
+
+      setTimeout(function(){
+            console.log(story_array)
+            var storyStops = "<storyStops>";
+            for (var i = 0; i<story_array.length; i++){
+               storyStops += story_array[i]
+               if (i == 0){
+                  storyStops += "<notes>" + info0 + "</notes>";
+                  storyStops += "<date>" + date0 + "</date>";
+               }
+               if (i>0 && i<story_array.length -1){
+                  storyStops += "<notes>" + info_array[i] + "</notes>";
+                  storyStops += "<date>" + info_array[i] + "</date>";
+               }
+               if (i==story_array.length -1 && i != 0){
+                  storyStops += "<notes>" + info7 + "</notes>";
+                  storyStops += "<date>" + date7 + "</date>";
+               }
+               storyStops +="</stop>";
+            }
+           storyStops += "</storyStops>"
+           fictionOverview = "<fictionOverview>";
+           fictionOverview += "<characters>" + characters + "</characters>";
+           fictionOverview += "<travelPurpose>" + purpose + "</travelPurpose>";
+           fictionOverview += "<modeOfTrans>" + travelMode + "</modeOfTrans>";
+           fictionOverview += "<income>" + budget + "</income>";
+           fictionOverview +="</fictionOverview>";
+           out = "<story><storyName>"+ storyName + "</storyName>" + storyStops + fictionOverview + "</story>";
+           console.log(storyStops)
+            $.ajax({type:"GET", url: $SCRIPT_ROOT + '/add_route', data: out, dataType:"xml"
+               , success:function(data) {
+              $("#result").text(data.result);
+           }});
+      
+      },3000);
 }
 function computeTotalDistance(result) {
         var total = 0;
