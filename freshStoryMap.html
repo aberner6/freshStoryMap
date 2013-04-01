@@ -30,13 +30,17 @@
     font-size: 12px;  
   }
   h1 {
-    text-align: left;
+width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0; text-align: left;
     font-family: 'Arial', sans-serif;
     font-size: 40px;
     color: black;
     text-shadow: 0px -1px 0px #AAA, 0px 1px 0px #EEEEEE;
     margin: 20px 10px 10px 10px;
-    position:absolute; z-index: 100
+   z-index: 100
   }
   input {
     font-family: 'Arial', sans-serif;
@@ -61,43 +65,40 @@
     position:absolute; z-index: 100; width: 100%;
     padding: 0px 20px;
     text-align: center;
-    margin-top: 50px;  
+    margin-top: 0px;  
     font-size: 16px;
   }
   #directionsPanel {
-/*    background: ;
-  background-color: rgba(255, 255, 255, 0.86);
-    width: 100%;
-    padding: 0px 10px;
-    margin: 0 auto;
-    box-shadow: 0px 0px 6px #999;
-    border-radius: 5px;
-    font-size: 14px;
-    position:absolute; z-index: 100*/
+
 background-color: rgba(255, 255, 255, 0.86);
-width: 80%;
-padding: 20px 10px;
+width: 100%;
+padding: 20px 0px;
 margin-right: 40;
 box-shadow: 0px 0px 6px #999;
 border-radius: 5px;
 font-size: 12px;
 position: absolute;
 z-index: 100;
-  }
+}
+
   .adp-directions {
     /*width: 100%;  */
   }
 .thumbnail
 {
 float: left;
-width: 110px;
+width: 90px;
+
+    margin-left: 6%;
+margin-top:6%;
 }
+
   form label {
     display: block;
     padding: 3px 5px;
   }
 
-  </style>
+   </style>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
   <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
   <div id="map-container">
@@ -105,86 +106,85 @@ width: 110px;
   </div>
 </head>
 <body>
+
+
     <h1>Story Maps</h1>
     <div id="location"></div>
-  <form action="/routebeschrijving" onSubmit="calcRoute();return false;" id="routeForm">
-    <div style="float: right; width: 18%; text-align: left;padding: 30px 0px 0px 30px;margin-right: 100;background-color: rgba(255, 255, 255, 0.85);">
+  <form action="/routebeschrijving" onsubmit="calcRoute();return false;" id="routeForm">
+    <div style="float: right; width: 18%; padding: 30px 0px 0px 0px;margin-right: 100;background-color: rgba(255, 255, 255, 0.85);">
     
       <label>
-      A Traveling Story:  <br /> 
+      A Traveling Story:  <br> 
       <div style="font-size:10">
      * = optional  
    </div>
-        <div class = "start">
+        <div class="start">
         <input id="storyName" type="text" size="50" placeholder="Title of novel, song, movie?">
-          <br /> 
+          <br> 
+                  </div>
           <label>
       Beginning: </label> 
         <input id="start" type="text" size="50" placeholder="First stop: city, state (or country)">
         <input id="info0" type="text" size="50" placeholder="A quotation from this stop">
         <input id="date0" type="text" size="50" placeholder="Around when? MM/DD/YYYY">
-        </div>
       </label>
-
-
-      <div id="flipone" style="font-size: 40; width: 30; height: 40; background-color: white;margin-left: 20;padding-bottom: 5;padding-left: 5"> + </div> <br />
-        <div id = "flip1" style = "display: none"> 
+      <div id="flipone" style="font-size: 40; width: 40; height: 45; background-color: white;margin: 20 20 20 40; cursor: pointer; border-radius: 20px;border: 0px;box-shadow: 0px 0px 6px black;box-shadow: 20px;"> + </div>
+        <div id="flip1" style="display: none"> 
         <label>
-          Add Waypoint: <br /> 
+          Add Waypoint: <br> 
         <input id="waypoint1" type="text" size="50" placeholder="Enter the next stop">
         <input id="info1" type="text" size="50" placeholder="quotation (optional)">
         <input id="date1" type="text" size="50" placeholder="MM/DD/YYYY">
-      </div>
-      </label>
-    <div id="fliptwo" style = "font-size: 40; width: 30; height: 40; background-color: white;margin-left: 20;padding-bottom: 5;padding-left: 5; display: none"> + </div>
-          <div id = "flip2" style = "display: none"> 
+      </label></div>
+      
+    <div id="fliptwo" style="font-size: 40; width: 40; height: 45; background-color: white;margin: 20 20 20 40; cursor: pointer; border-radius: 20px;border: 0px;box-shadow: 0px 0px 6px black;box-shadow: 20px; display: none"> + </div>
+          <div id="flip2" style="display: none"> 
         <label>
-          Waypoint: <br />
+          Waypoint: <br>
         <input id="waypoint2" type="text" size="50" placeholder="Enter the next stop">
         <input id="info2" type="text" size="50" placeholder="quotation (optional)">
         <input id="date2" type="text" size="50" placeholder="MM/DD/YYYY">
-      </div>
-      </label>
-    <div id="flipthree" style="font-size: 40; width: 30; height: 40; background-color: white;margin-left: 20;padding-bottom: 5;padding-left: 5; display: none"> + </div>
-          <div id = "flip3" style = "display: none"> 
+      </label></div>
+      
+    <div id="flipthree" style="font-size: 40; width: 40; height: 45; background-color: white;margin: 20 20 20 40; cursor: pointer; border-radius: 20px;border: 0px;box-shadow: 0px 0px 6px black;box-shadow: 20px; display: none"> + </div>
+          <div id="flip3" style="display: none"> 
         <label>
-          Waypoint: <br />
+          Waypoint: <br>
         <input id="waypoint3" type="text" size="50" placeholder="Enter the next stop">
         <input id="info3" type="text" size="50" placeholder="quotation (optional)">
         <input id="date3" type="text" size="50" placeholder="MM/DD/YYYY">
-      </div>
-      </label>
-    <div id="flipfour" style="font-size: 40; width: 30; height: 40; background-color: white;margin-left: 20;padding-bottom: 5;padding-left: 5; display: none"> + </div> 
-          <div id = "flip4" style = "display: none"> 
+      </label></div>
+      
+    <div id="flipfour" style="font-size: 40; width: 40; height: 45; background-color: white;margin: 20 20 20 40; cursor: pointer; border-radius: 20px;border: 0px;box-shadow: 0px 0px 6px black;box-shadow: 20px; display: none"> + </div> 
+          <div id="flip4" style="display: none"> 
         <label>
-          Waypoint: <br />
+          Waypoint: <br>
         <input id="waypoint4" type="text" size="50" placeholder="Enter the next stop">
         <input id="info4" type="text" size="50" placeholder="quotation (optional)">
         <input id="date4" type="text" size="50" placeholder="MM/DD/YYYY">
-      </div>
-      </label>
-    <div id="flipfive" style="font-size: 40; width: 30; height: 40; background-color: white;margin-left: 20;padding-bottom: 5;padding-left: 5; display: none"> + </div> 
-          <div id = "flip5" style = "display: none"> 
+      </label></div>
+      
+    <div id="flipfive" style="font-size: 40; width: 40; height: 45; background-color: white;margin: 20 20 20 40; cursor: pointer; border-radius: 20px;border: 0px;box-shadow: 0px 0px 6px black;box-shadow: 20px; display: none"> + </div> 
+          <div id="flip5" style="display: none"> 
         <label>
-          Waypoint: <br />
+          Waypoint: <br>
         <input id="waypoint5" type="text" size="50" placeholder="Enter the next stop">
         <input id="info5" type="text" size="50" placeholder="quotation (optional)">
         <input id="date5" type="text" size="50" placeholder="MM/DD/YYYY">
-      </div>
-      </label>
-    <div id="flipsix" style="font-size: 40; width: 30; height: 40; background-color: white;margin-left: 20;padding-bottom: 5;padding-left: 5; display: none"> + </div> 
-          <div id = "flip6" style = "display: none"> 
+      </label></div>
+      
+    <div id="flipsix" style="font-size: 40; width: 40; height: 45; background-color: white;margin: 20 20 20 40; cursor: pointer; border-radius: 20px;border: 0px;box-shadow: 0px 0px 6px black;box-shadow: 20px; display: none"> + </div> 
+          <div id="flip6" style="display: none"> 
         <label>
-          Waypoint: <br />
+          Waypoint: <br>
         <input id="waypoint6" type="text" size="50" placeholder="Enter the next stop">
         <input id="info6" type="text" size="50" placeholder="quotation (optional)">
         <input id="date6" type="text" size="50" placeholder="MM/DD/YYYY">
-      </div>
-      </label>
+      </label></div>
 
     <label>
-      End: <br />
-        <div class = "end">
+      End: <br>
+        <div class="end">
         <input id="end" type="text" size="50" placeholder="Enter the last stop">
         <input id="info7" type="text" size="50" placeholder="quotation (optional)">
         <input id="date7" type="text" size="50" placeholder="MM/DD/YYYY">
@@ -192,22 +192,19 @@ width: 110px;
       </label>
 
     <label>
-      Who? <br />
+      Who? <br>
         <input id="characters" type="text" size="50" placeholder="Characters">
       </label>
 
-
-
-
-
+<input type="radio" name="travelMode" style="display:none" value="DRIVING" checked /> 
 
 
 <div class="thumbnail">
 <label>
-      Budget* <br />
+      Budget* <br>
 <label style="font-size: 12;font-family: arial, sans serif;
     box-shadow: 0px 0px 6px black;
-    border-radius: 2px; background-color: rgba(255, 255, 255, 0.86); width: 90;color: rgba(128, 128, 128, 0.75);"><input type="radio" name="budget" value="low" checked /> Low </label>
+    border-radius: 2px; background-color: rgba(255, 255, 255, 0.86); width: 90;color: rgba(128, 128, 128, 0.75);"><input type="radio" name="budget" value="low" checked=""> Low </label>
 <label style="font-size: 12;font-family: arial, sans serif;
     box-shadow: 0px 0px 6px black;
     border-radius: 2px; background-color: rgba(255, 255, 255, 0.86); width: 90;color: rgba(128, 128, 128, 0.75);"><input type="radio" name="budget" value="medium"> Medium </label>
@@ -216,51 +213,34 @@ width: 110px;
     border-radius: 2px; background-color: rgba(255, 255, 255, 0.86); width: 90;color: rgba(128, 128, 128, 0.75);"><input type="radio" name="budget" value="high"> High </label>
       </label>
 <label>
-</div>
+</label></div>
 <div class="thumbnail">
   <label>
-      Purpose* <br />
+      Purpose* <br>
 <label style="font-size: 12;font-family: arial, sans serif;
     box-shadow: 0px 0px 6px black;
-    border-radius: 2px; background-color: rgba(255, 255, 255, 0.86); width: 90;color: rgba(128, 128, 128, 0.75);"><input type="radio" name="travelPurp" value="escape" checked /> Escape </label>
+    border-radius: 2px; background-color: rgba(255, 255, 255, 0.86); width: 90;color: rgba(128, 128, 128, 0.75);"><input type="radio" name="travelPurp" value="escape" checked=""> Escape </label>
 <label style="font-size: 12;font-family: arial, sans serif;
     box-shadow: 0px 0px 6px black;
     border-radius: 2px; background-color: rgba(255, 255, 255, 0.86); width: 90;color: rgba(128, 128, 128, 0.75);"><input type="radio" name="travelPurp" value="adventure"> Adventure </label>
     <input id="purpose4" type="text" size="50" style="width: 100; height:25" placeholder="add your own">
   </label>
 </div>
-
-
-
-<div class="other" style="float:left">
 <label>
-      Travel Mode: <br />
-<label style="font-size: 12;font-family: arial, sans serif;
-    box-shadow: 0px 0px 6px black;
-    border-radius: 2px; background-color: rgba(255, 255, 255, 0.86); width: 90;color: rgba(128, 128, 128, 0.75);"><input type="radio" name="travelMode" value="DRIVING" checked /> Driving </label>
-<label style="font-size: 12;font-family: arial, sans serif;
-    box-shadow: 0px 0px 6px black;
-    border-radius: 2px; background-color: rgba(255, 255, 255, 0.86); width: 90;color: rgba(128, 128, 128, 0.75);"><input type="radio" name="travelMode" value="BICYCLING"> Bicycling </label>
-<label style="font-size: 12;font-family: arial, sans serif;
-    box-shadow: 0px 0px 6px black;
-    border-radius: 2px; background-color: rgba(255, 255, 255, 0.86); width: 90;color: rgba(128, 128, 128, 0.75);"><input type="radio" name="travelMode" value="TRANSIT"> Public Trans</label>
-<label style="font-size: 12;font-family: arial, sans serif;
-    box-shadow: 0px 0px 6px black;
-    border-radius: 2px; background-color: rgba(255, 255, 255, 0.86); width: 90;color: rgba(128, 128, 128, 0.75);"><input type="radio" name="travelMode" value="WALKING"> Walking </label>
-    </label>
-  </div>
-    <input type="submit" value="Map Story" style="float: left;">
-  </form>
-    <form action="/routebeschrijving" onSubmit="sendRoute();return false;">
-      <div id="submission">
+<input type="submit" value="Map Story" style="margin-right: 8.7%;">
+<div id="submission" style="
+">
       <input type="submit" value="Submit">
-    </div>
+    </div></label>
+  
+    <form action="/routebeschrijving" onsubmit="sendRoute();return false;" style="
+">
 
-    <p style= "float:left;">Total Distance: <span id="total"></span></p>
+    <p style="">Total Distance: <span id="total"></span></p>
 </form>
-    <div id="directionsPanel" style="position: relative; float: left;margin-left: -25;font-size: 12;width: 100%;">
+    <div id="directionsPanel" style=" font-size: 12;position: relative;">
   </div>
-</div>
+</div></form>
 
 
 
@@ -459,7 +439,7 @@ function plotEach(){
 function calcRoute() {
    console.log("WE GOT HERE")
   // get the travelmode, startpoint and via point from the form   
-  var travelMode = $('input[name="travelMode"]:checked').val();
+  var travelMode = "DRIVING";
   var start = $("#start").val();
   var end = $("#end").val();
 
@@ -528,7 +508,7 @@ function calcRoute() {
 }
 
 function sendRoute() {
- // get the travelmode, startpoint and via point from the form   
+ get the travelmode, startpoint and via point from the form   
   var travelMode = $('input[name="travelMode"]:checked').val();
   var budget = $('input[name="budget"]:checked').val();
   var purpose = $('input[name="travelPurp"]:checked').val();
@@ -865,5 +845,5 @@ function computeTotalDistance(result) {
 <script type=text/javascript>
   $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
 </script>
-</body>
-  </html>
+
+ </body></html>
