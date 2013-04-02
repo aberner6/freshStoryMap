@@ -226,16 +226,14 @@ margin-top:6%;
 <div>
 <input type="submit" value="Map Story">
 </div>
+</form>
 
-
-<div id="submission" style="
-">
+    <form action="/routebeschrijving" onsubmit="sendRoute();return false;">
+      <div id="submission">
       <input type="submit" value="Submit">
     </div>
-  
-    <form action="/routebeschrijving" onsubmit="sendRoute();return false;" style="
-">
 </form>
+
 <div>
     <p style="">Total Distance: <span id="total"></span></p>
   </div>
@@ -303,6 +301,9 @@ $("#flipsix").click(function(){
 $("#submission").click(function(){
     $("#submission").slideUp("slow");
   });
+$("#submission").change(function() {
+sendRoute();
+    });
 })
 
 function displayLocation(position) {
@@ -439,7 +440,7 @@ function plotEach(){
 function calcRoute() {
    console.log("WE GOT HERE")
   // get the travelmode, startpoint and via point from the form   
-  var travelMode = "DRIVING";
+  var travelMode = $('input[name="travelMode"]:checked').val();
   var start = $("#start").val();
   var end = $("#end").val();
 
@@ -508,6 +509,7 @@ function calcRoute() {
 }
 
 function sendRoute() {
+  console.log("sendingroute")
   var travelMode = $('input[name="travelMode"]:checked').val();
   var budget = $('input[name="budget"]:checked').val();
   var purpose = $('input[name="travelPurp"]:checked').val();
@@ -841,7 +843,7 @@ function computeTotalDistance(result) {
 
 
 </script>
-<script type=text/javascript>
+ <script type=text/javascript>
   $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
-</script>
+ </script>
 </body></html>
